@@ -1,28 +1,32 @@
 #!/usr/bin/python3
-"""
-starts a Flask web application
-"""
-
+'''module - multi-routes:
+define index(), and plus some other endpoints
+'''
 from flask import Flask
+
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
 def index():
-    """returns Hello HBNB!"""
-    return 'Hello HBNB!'
+    '''return `Hello, World` text'''
+    return f'Hello HBNB!'
 
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    """returns HBNB"""
-    return 'HBNB'
+    '''display “HBNB”'''
+    return f'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def cisfun(text):
-    """display “C ” followed by the value of the text variable"""
-    return 'C ' + text.replace('_', ' ')
+def url_text(text):
+    '''
+    pass URL parameters to endpoint control
+    the 'text' variable will be of type string
+    '''
+    return f"C {text.replace('_', ' ')}"
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port=5000)

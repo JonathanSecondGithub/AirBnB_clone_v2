@@ -1,25 +1,30 @@
 #!/usr/bin/python3
-"""
-starts a Flask web application
-"""
+'''module: 8-cities_by_states
+includes the Flask web application, SQLAlchemy setup, routes, and templates
+'''
 
 from flask import Flask, render_template
-from models import *
 from models import storage
+from models.state import State
+
 app = Flask(__name__)
-
-
-@app.route('/cities_by_states', strict_slashes=False)
-def cities_by_states():
-    """display the states and cities listed in alphabetical order"""
-    states = storage.all("State").values()
-    return render_template('8-cities_by_states.html', states=states)
+app.url_map.strict_slashes = False
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
-    """closes the storage on teardown"""
+def teardown_db(self):
+    '''remove the current SQLAlchemy Session objecf after each request.'''
     storage.close()
 
+
+@app.route('/cities_by_states')
+def cities_by_states():
+    '''Cities, States Endpoint:
+    route and the corresponding function to handle the request
+    '''
+    states = sorted(list(storage.all(State).values()), key=lambda x: x.name)
+    return render_template('8-cities_by_states.html', states=states)
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port=5000)
